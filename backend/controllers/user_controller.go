@@ -10,13 +10,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(c *gin.Context) {
+func FindUsers(c *gin.Context) {
+	var users []models.User
+
+	database.DB.Find(&users)
+
+	c.JSON(http.StatusOK, structs.SuccessResponse{
+		Success: true,
+		Message: "Lists Data Users",
+		Data: users,
+	})
+}
+
+func CreateUser(c *gin.Context) {
 	var req = structs.UserCreateRequest{}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, structs.ErrorResponse{
 			Success: false,
-			Message: "Validasi Errors",
+			Message: "Validation Errors",
 			Errors: helpers.TranslateErrorMessage(err),
 		})
 		return
@@ -30,19 +42,11 @@ func Register(c *gin.Context) {
 	}
 
 	if err := database.DB.Create(&user).Error; err != nil {
-		if helpers.IsDuplicateEntryError(err) {
-			c.JSON(http.StatusConflict, structs.ErrorResponse{
-				Success: false,
-				Message: "Duplicate entry error",
-				Errors: helpers.TranslateErrorMessage(err),
-			})
-		} else {
-			c.JSON(http.StatusInternalServerError, structs.ErrorResponse{
-					Success: false,
-					Message: "Failed to create user",
-					Errors: helpers.TranslateErrorMessage(err),
-			})
-		}
+		c.JSON(http.StatusInternalServerError, structs.ErrorResponse{
+			Success: false,
+			Message: "Failed to create user",
+			Errors: helpers.TranslateErrorMessage(err),
+		})
 		return
 	}
 
@@ -50,12 +54,12 @@ func Register(c *gin.Context) {
 		Success: true,
 		Message: "User created successfully",
 		Data: structs.UserResponse{
-			Id:	user.Id,
-			Name:	user.Name,
-			Username:	user.Username,
-			Email:	user.Email,
-			CreatedAt:	user.CreatedAt.Format("2006-01-02 15:04:05"),
-			UpdatedAt:	user.CreatedAt.Format("2006-01-02 15:04:05"),
+			Id: user.Id,
+			Name: user.Name,
+			Username: user.Username,
+			Email: user.Email,
+			CreatedAt: user.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt: user.UpdatedAt.Format("2006-01-02 15:04:05"),
 		},
 	})
 }

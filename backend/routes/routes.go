@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/azrilpramudia/go-restful-api/controllers"
+	"github.com/azrilpramudia/go-restful-api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +16,9 @@ func SetupRouter() *gin.Engine {
 	})
 
 	router.POST("/api/register", controllers.Register)
+	router.POST("/api/login", controllers.Login)
+	router.GET("/api/users", middleware.AuthMiddleware(), controllers.FindUsers)
+	router.POST("/api/users", middleware.AuthMiddleware(), controllers.CreateUser)
 
 	return router
 }
