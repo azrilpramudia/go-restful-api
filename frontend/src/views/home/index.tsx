@@ -8,10 +8,10 @@ const Home: FC = () => {
         <h1 className="display-5 fw-bold">Home</h1>
         <p className="col-md-12 fs-4">Welcome to the Home page!</p>
         <br />
-        <Link to={"/register"} className="btn btn-primary btn-lg me-3">
+        <Link to="/register" className="btn btn-primary btn-lg me-3">
           Register
         </Link>
-        <Link to={"/login"} className="btn btn-secondary">
+        <Link to="/login" className="btn btn-secondary btn-lg">
           Login
         </Link>
       </div>

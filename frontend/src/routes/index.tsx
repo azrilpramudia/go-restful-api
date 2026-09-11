@@ -7,18 +7,18 @@ import Login from "../views/auth/login";
 
 export default function AppRoutes() {
   const auth = useContext(AuthContext);
-  const setIsAuthenticated = auth?.setIsAuthenticated ?? false;
+  const isAuthenticated = auth?.isAuthenticated ?? false;
 
   return (
     <Routes>
-      {/* {Route} */}
+      {/* route "/" */}
       <Route path="/" element={<Home />} />
 
-      {/* {Register} */}
+      {/* route "/register" */}
       <Route
         path="/register"
         element={
-          setIsAuthenticated ? (
+          isAuthenticated ? (
             <Navigate to="/admin/dashboard" replace />
           ) : (
             <Register />
@@ -26,11 +26,11 @@ export default function AppRoutes() {
         }
       />
 
-      {/* {Login} */}
+      {/* route "/login" */}
       <Route
         path="/login"
         element={
-          setIsAuthenticated ? (
+          isAuthenticated ? (
             <Navigate to="/admin/dashboard" replace />
           ) : (
             <Login />
