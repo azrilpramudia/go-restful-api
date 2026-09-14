@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext.tsx";
 import { Routes, Route, Navigate } from "react-router";
-import Home from "../views/home";
-import Register from "../views/auth/register";
-import Login from "../views/auth/login";
+import Home from "../views/home/index.tsx";
+import Register from "../views/auth/register.tsx";
+import Login from "../views/auth/login.tsx";
+import Dashboard from "../views/admin/dashboard/index.tsx";
 
 export default function AppRoutes() {
   const auth = useContext(AuthContext);
@@ -35,6 +36,14 @@ export default function AppRoutes() {
           ) : (
             <Login />
           )
+        }
+      />
+
+      {/* route "/admin/dashboard" */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />
         }
       />
     </Routes>
